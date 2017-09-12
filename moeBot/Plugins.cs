@@ -36,7 +36,7 @@ namespace Plugins
         public static void LoadIn()
         {
             Loader l = new Loader();
-            l.Plugin();
+            l.Plugin;
 
         }
 
@@ -48,7 +48,7 @@ namespace Plugins
         public void Plugin()
         {
             string PluginName = null;
-            string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
+            string applicationPath = AppDomain.CurrentDomain.BaseDirectory; 
 
             if (Load().Count == 0)
             {
@@ -84,15 +84,16 @@ namespace Plugins
             //Load the plugin into Assembly and return the ICollection back
 
             Console.WriteLine("Initializing Plugins...");
-            List<string> dllFileNames = PathFinder();
-            ICollection<Assembly> assemblies = new List<Assembly>(PathFinder().Count);
+            List<string> dllFileNames = PathFinder();        //载入文件名
+            ICollection<Assembly> assemblies = new List<Assembly>(PathFinder().Count);  
+            //容量为dll文件数量，变量类型为assembly（？），的新collection
 
-            foreach (string dllFile in dllFileNames)
+            foreach (string dllFile in dllFileNames)    
             {
-                AssemblyName an = AssemblyName.GetAssemblyName(dllFile);
-                Console.WriteLine(an);
-                Assembly assembly = Assembly.Load(an);
-                assemblies.Add(assembly);
+                AssemblyName an = AssemblyName.GetAssemblyName(dllFile);    //为assemblyname（string？）属性赋值并命名为an
+                Console.WriteLine(an);//显示插件名
+                Assembly assembly = Assembly.Load(an);//直接载入 ？
+                assemblies.Add(assembly);//为collection加入新的assembly
             }
 
             Type pluginType = typeof(IPlugin);
@@ -130,25 +131,25 @@ namespace Plugins
         
         //Find Path
         
-        private List<string> PathFinder()
+        private List<string> PathFinder()    //UNDERSTOOD
         {
             List<string> pluginpath = new List<string>();
             try
             {
                 //获取程序的基目录
-                string path = AppDomain.CurrentDomain.BaseDirectory;
+                string path = AppDomain.CurrentDomain.BaseDirectory;      //得到根目录
                 //合并路径，指向插件所在目录。
-                path = Path.Combine(path, "Plugins");
-                foreach (string filename in Directory.GetFiles(path, "*.dll"))
+                path = Path.Combine(path, "Plugins");                    //根目录下Plugins文件夹
+                foreach (string filename in Directory.GetFiles(path, "*.dll"))    //插件所在文件夹下dll文件名
                 {
-                    pluginpath.Add(filename);
+                    pluginpath.Add(filename);             //文件名加入list
                 }
             }
             catch (Exception ex)
             {
                 Console.Write(ex.Message);
             }
-            return pluginpath;
+            return pluginpath;                      //把pluginpath返回patherfinder方式的结果
         }
     }
 
